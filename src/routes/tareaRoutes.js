@@ -75,4 +75,32 @@ try {
 }
 
 });
+
+router.patch('/:id/prioridad', async (req, res) => { //actualiza parcialmente una tarea por id(cambia el estado a reabierta)
+const newPrioridad = req.body.prioridad; // obtiene la nueva prioridad del body de la solicitud
+const prioridadesValidas = ['baja', 'media', 'alta']; // define las prioridades válidas
+if( !prioridadesValidas.includes(newPrioridad)) { // verifica si la nueva prioridad es válida
+    return res.status(400).json({ error: 'Prioridad no válida' }); // 400 error de solicitud incorrecta
+}
+try {
+    const [filasActualizadas] = await Tarea.update(
+        { prioridad: newPrioridad }, // actualiza la prioridad de la tarea
+        { where: { id: req.params.id } } // busca la tarea por id
+    );
+    if (filasActualizadas === 0) {
+        return res.status(404).json({ error: 'Tarea no encontrada' }); // 404 no encontrado
+    }
+    const tareaActualizada = await Tarea.findByPk(req.params.id); 
+    res.status(200).json(tareaActualizada);
+} catch (error) {
+    res.status(500).json({ error: 'Error al actualizar la prioridad de la tarea' }); 
+    console.error(error);
+}
+
+
+
+
+
+});
+
 export default router;
