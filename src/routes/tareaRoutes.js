@@ -1,5 +1,6 @@
 import express from 'express';
 import Tarea from '../models/Tarea.js';
+import sequelize from '../config/database.js'; // Importa sequelize para usar funciones como fn y col
 const router = express.Router();
 
 router.post('/', async (req, res) => { //crea una nueva tarea
@@ -96,11 +97,47 @@ try {
     res.status(500).json({ error: 'Error al actualizar la prioridad de la tarea' }); 
     console.error(error);
 }
+});
+
+router.get('/estadisticas', async (req, res) => {
+try {
+    const totalTareas = await Tarea.count(); // cuenta el total de tareas registradas
+    const tareasPorEstado = await Tarea.findAll({
+        attributes: ['estado', [sequelize.fn('COUNT', sequelize.col('estado')), 'cantidad']], // . fn es por funcion -- cuenta las tareas por estado
+        group: ['estado'] // agrupa las tareas por estado
+    });
+    const tareasPorPrioridad = await Tarea.findAll({
+        attributes: ['prioridad', [sequelize.fn('COUNT', sequelize.col('prioridad')), 'cantidad']], // cuenta las tareas por prioridad
+        group: ['prioridad'] // agrupa las tareas por prioridad
+    });
+    const tareasCompletadas = await Tarea.findAll({ where: { estado: 'completada' }, attributes:['fechaDeVencimiento', 'fechaDeFinalizacion']}); // cuenta las tareas completadas
+    let totalDeDias = 0; 
+    let cantCompletadas = tareasCompletadas.length; 
+    tareasCompletadas.forEach(tarea => {
+        if(tarea.fechaDeVencimiento && tarea.fechaDeFinalizacion) {
+            const msDiff = new Date(tarea.fechaDeFinalizacion) - new Date(tarea.fechaDeVencimiento); // calcula la diferencia en milisegundos
+            const dias = msDiff / (1000 * 60 * 60 * 24); // convierte la diferencia a días
+            totalDeDias += dias; // suma la diferencia al total de días
+        }
+    });
+    const promedioDuracion = cantCompletadas > 0 ? totalDeDias / cantCompletadas : 0; // calcula el promedio de días de finalización
+    res.status(200).json({
+        totalTareas,
+        tareasPorEstado,
+        tareasPorPrioridad,
+        promedioDiasParaCompletar: promedioDuracion.toFixed(2), // devuelve el promedio de días para completar las tareas
+    }); // devuelve las estadísticas en formato JSON
+} catch (error) {
+    res.status(500).json({ error: 'Error al obtener las estadísticas' }); 
+    console.error(error); 
+    
+}
 
 
 
 
 
 });
+
 
 export default router;
