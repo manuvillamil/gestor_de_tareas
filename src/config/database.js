@@ -1,11 +1,17 @@
-import {Sequelize} from 'sequelize';
-const sequelize = new Sequelize(
-    'gestor_tareas',
-    'root',
-    '8436teodoro',{
-        host: 'localhost',
-        dialect: 'mysql',
-    });
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
+dotenv.config();
 
-    export default sequelize;
+const sequelize = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD, {
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT,
+    port: process.env.DB_PORT,
+});
+//trabajar con un archivo .env
+//dotenv
+//usar un docker container
+export default sequelize;
 // Exporta la instancia de Sequelize para que pueda ser utilizada en otros archivos
