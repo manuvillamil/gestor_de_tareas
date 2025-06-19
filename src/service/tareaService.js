@@ -1,4 +1,4 @@
-import tareaRepository from "../repository/tareaRepository";
+import tareaRepository from "../repository/tareaRepository.js";
 export const crearTarea = async (data) =>  tareaRepository.crearTarea(data);
 export const obtenerTareas = async () => tareaRepository.obtenerTareas();
 export const obtenerTareaPorId = async (id) => tareaRepository.obtenerTareaPorid(id);

@@ -1,4 +1,5 @@
 import * as tareaService from '../service/tareaService.js';
+import Tarea from '../models/Tarea.js';
 
 export const crear = async(req, res) => { //crea una nueva tarea
     try {
