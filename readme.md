@@ -26,6 +26,7 @@ La API permite crear, consultar, actualizar y eliminar tareas. Cada tarea cuenta
    cd gestor_de_tareas
    ```
 2. Instalar dependencias principales:
+   Descargar e instalar Node.js
    ```bash
    npm install express sequelize mysql2 dotenv cors
    ```
@@ -33,7 +34,7 @@ La API permite crear, consultar, actualizar y eliminar tareas. Cada tarea cuenta
    ```bash
    npm install --save-dev nodemon biome
    ```
-4. Crear un archivo `.env` en la raíz con los siguientes datos:
+4. Corroborar los datos del archivo `.env` en la raíz para la conexion con la base de datos:
    ```
    DB_HOST=tu-host-de-aiven
    DB_USER=tu-usuario
@@ -45,11 +46,7 @@ La API permite crear, consultar, actualizar y eliminar tareas. Cada tarea cuenta
    ```bash
    npm start
    ```
-   O para desarrollo:
-   ```bash
-   npx nodemon src/index.js
-   ```
-
+   
 ## Detalles sobre la base de datos
 
 - Se utiliza una base de datos MySQL creada en el servicio Aiven.
