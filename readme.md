@@ -56,6 +56,7 @@ La API permite crear, consultar, actualizar y eliminar tareas. Cada tarea cuenta
   - Obtener los datos de conexión (host, usuario, contraseña, nombre y puerto).
   - Colocarlos en el archivo `.env` como se indica arriba.
 - Para generar la estructura de la base de datos, Sequelize crea las tablas automáticamente según los modelos definidos en el proyecto.
+- El archivo [`ddl/schema.sql`](ddl/schema.sql) contiene el script DDL para crear la tabla `tareas` usada por la aplicación.
 
 ## Notas técnicas
 

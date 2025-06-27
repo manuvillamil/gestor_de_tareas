@@ -1,4 +1,5 @@
 import * as tareaService from '../service/tareaService.js';
+import sequelize from '../config/database.js';
 import Tarea from '../models/Tarea.js';
 
 export const crear = async(req, res) => { //crea una nueva tarea
@@ -125,7 +126,7 @@ export const obtenerEstadisticas = async(req, res) => { //obtiene las estadistic
         promedioDiasParaCompletar: promedioDuracion.toFixed(2), // devuelve el promedio de días para completar las tareas
     }); // devuelve las estadísticas en formato JSON
 } catch (error) {
-    res.status(500).json({ error: 'Error al obtener las estadísticas' }); 
-    console.error(error); 
-    
+  console.error("Error en obtenerEstadisticas:", error);
+  res.status(500).json({ error: error.message || 'Error al obtener estadísticas' });
 }};
+
